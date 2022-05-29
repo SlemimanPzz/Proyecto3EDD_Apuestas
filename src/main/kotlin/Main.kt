@@ -1,19 +1,43 @@
-import kotlinx.serialization.json.Json
 import usuario.Usuario
-import java.io.FileWriter
-import kotlinx.serialization.*
-import java.io.FileReader
+import kotlin.system.exitProcess
+
+fun inicio(): Usuario? {
+    println("BIENVENIDO")
+    println("1. Crear Usuario")
+    println("2. Inicia Sesión")
+    while (true){
+        val sel = readln()
+        try {
+            when(sel.toInt()){
+                1 -> {
+                    val nuevoUsuario = Usuario.creaUsuario() ?: continue
+                    nuevoUsuario.guarda()
+                    println("Usuario creado")
+                    println("1. Crear Usuario")
+                    println("2. Inicia Sesión")
+                }
+                2 -> {
+                    println("Ingresa tu Usuario")
+                    val usr = Usuario.iniciaSesion(readln()) ?: continue
+                    println("Seción iniciado con usuario ${usr.nombre}")
+                    return usr
+                }
+                else -> println("Ingresa un numero valido")
+            }
+        } catch (_: NumberFormatException){
+            println("Ingresa un numero valido")
+        }
+        return null
+    }
+}
+
+
+
+
+
 
 fun main(){
-    println("Nombre:")
-    val usr  = Usuario(saldo = 70.0, name = readln())
-    usr.saldo = readln().toDouble()
-    val archivo = FileWriter("./Usuarios/${usr.name}.json")
-    val archivo2 = FileReader("./Usuarios/${usr.name}.json")
-    archivo.write(Json.encodeToString(usr))
-    archivo.close()
-    val usr2 = Json.decodeFromString<Usuario>(archivo2.readText())
+    val usr = inicio() ?: exitProcess(0)
+    println("Usurario ${usr.nombre}, tu historial ${usr.historial.historial}")
 
-    println(usr)
-    println(usr == usr2)
 }
