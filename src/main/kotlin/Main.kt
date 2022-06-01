@@ -1,5 +1,5 @@
+import carrera.Carrera
 import usuario.Usuario
-import kotlin.system.exitProcess
 
 fun inicio(): Usuario? {
     println("BIENVENIDO")
@@ -37,7 +37,6 @@ fun inicio(): Usuario? {
 
 
 fun main(){
-    val usr = inicio() ?: exitProcess(0)
-    println("Usurario ${usr.nombre}, tu historial ${usr.historial.historial}")
 
-}
+    Carrera(6)
+    }

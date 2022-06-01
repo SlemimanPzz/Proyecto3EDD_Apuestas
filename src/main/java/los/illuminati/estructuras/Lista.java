@@ -239,10 +239,10 @@ public class Lista<T> implements Iterable<T> {
 
     /**
      * Elimina el primer elemento de la lista y lo regresa.
-     * @return el primer elemento de la lista antes de eliminarlo.
+     *
      * @throws NoSuchElementException si la lista es vacía.
      */
-    public T eliminaPrimero() {
+    public void eliminaPrimero() {
         if (cabeza == null){
             throw new NoSuchElementException();
         }
@@ -251,22 +251,21 @@ public class Lista<T> implements Iterable<T> {
             cabeza.elemento = null;
             rabo = cabeza = null;
             longitud = 0;
-            return eliminado;
+            return;
         }
         Nodo ahoraSeraElPrimero = cabeza.siguiente;
         Nodo elEliminado = cabeza;
         ahoraSeraElPrimero.anterior = null;
         cabeza = ahoraSeraElPrimero;
         longitud--;
-        return elEliminado.elemento;
     }
 
     /**
      * Elimina el último elemento de la lista y lo regresa.
-     * @return el último elemento de la lista antes de eliminarlo.
+     *
      * @throws NoSuchElementException si la lista es vacía.
      */
-    public T eliminaUltimo() {
+    public void eliminaUltimo() {
         if(rabo == null){
             throw new NoSuchElementException();
         }
@@ -275,14 +274,13 @@ public class Lista<T> implements Iterable<T> {
             cabeza.elemento = null;
             rabo = cabeza = null;
             longitud--;
-            return eliminado;
+            return;
         }
         Nodo ahoraSeraElUltimo = rabo.anterior;
         Nodo elEliminado = rabo;
         ahoraSeraElUltimo.siguiente = null;
         rabo = ahoraSeraElUltimo;
         longitud--;
-        return elEliminado.elemento;
     }
 
     /**
