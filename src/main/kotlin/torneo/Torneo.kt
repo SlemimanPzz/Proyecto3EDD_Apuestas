@@ -3,7 +3,7 @@ package torneo
 import kotlin.Random.nextInt
 import kotlin.math.min 
 import los.illuminati.colors
-import usuario.Usuario
+import usuario.*
 
 class Torneo(){
 
