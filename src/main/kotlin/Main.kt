@@ -1,7 +1,10 @@
+import carrera.Carrera
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import usuario.Usuario
-import kotlin.system.exitProcess
 
-fun inicio(): Usuario? {
+fun inicio(): Usuario {
     println("BIENVENIDO")
     println("1. Crear Usuario")
     println("2. Inicia Sesión")
@@ -27,17 +30,146 @@ fun inicio(): Usuario? {
         } catch (_: NumberFormatException){
             println("Ingresa un numero valido")
         }
-        return null
+    }
+}
+
+fun consultaCarreras(car : Carrera){
+    while (true){
+        println("¿Que quieres consultar?")
+        println("1. Todos los corredores")
+        println("2. Uno en especifico")
+        println("3. Salir de consultas")
+        val consulta = readln()
+        try { consulta.toInt() } catch (_ : NumberFormatException) { println("Ingresa un Numero valido"); continue }
+        when(consulta.toInt()){
+            1 -> {
+                car.corredores.forEach { println(it) }
+                println("Todos los corredores presentados")
+            }
+            2 -> {
+                println("¿Que concursante quieres consultar?")
+                val x = readln()
+                try { x.toInt() } catch (_ : NumberFormatException) { println("Ingresa un Numero valido"); continue }
+                car.consultaParticipante(x.toInt())
+                continue
+            }
+            3 -> {
+                println("¿Estas seguro que quieres dejar de consular?[y/N]")
+                val salir = readln()
+                if(salir == "y" || salir == "Y") return
+                else println("Decideste no salir")
+                continue
+            }
+            else -> {
+                println("Selecciona una opción valida.")
+                continue
+            }
+        }
+    }
+}
+
+fun apostar(car : Carrera){
+    while (true){
+        if(car.apuesta != 0){
+            println("Estas seguro que quieres sobreescribir la apuesta?[y/N]")
+            val sobre = readln()
+            if(sobre == "y" || sobre == "Y") {
+                println("Saliendo")
+                return
+            }
+            else println("Continuando")
+        }
+        println("¿Cuanto quieres apostar?(-1 para salir)")
+        val x = readln()
+        try { x.toFloat() } catch (_ : NumberFormatException) { println("Ingresa un Numero valido"); continue }
+        if(x.toFloat() < 0){
+            println("Saliendo de las apuestas")
+            return
+        }
+        println("¿A quien se lo quieres apostar?[1-${car.numCompetidores}]")
+        val y = readln()
+        try { x.toInt() } catch (_ : NumberFormatException) { println("Ingresa un Numero valido"); continue }
+        if(x.toInt() !in 1 .. car.numCompetidores){
+            println("Tienes que escoger un corredor valido")
+            println("Vuelve a apostar")
+            continue
+        }
+        println("Toma en cuenta que tu apuesta es para la siguiente carrera.")
+        car.apostado = x.toFloat()
+        car.apuesta = y.toInt()
+        println("Tu apuesta quedo registrada en la carrera.")
+        return
+    }
+}
+
+fun menu(car : Carrera, usr : Usuario) {
+    while (true){
+        println("Menu")
+        println("1. Apostar")
+        println("2. Consultas de Carrera")
+        println("3. Agregar Saldo")
+        println("4. Consultar historial")
+        println("5. Salir")
+        val x = readln()
+        try { x.toInt() } catch (_ : NumberFormatException) { println("Ingresa un Numero valido"); continue }
+        when (val m = x.toInt()) {
+            5 -> {
+                println("¿Estas seguro que quieres salir?[y/N]")
+                val salir = readln()
+                if(salir == "y" || salir == "Y") return
+                else println("Decideste no salir")
+                continue
+            }
+            4 -> {
+                usr.consultaHistorial()
+            }
+            3 -> {
+                usr.agregarSaldo()
+            }
+            2 -> {
+                consultaCarreras(car)
+            }
+            1 -> {
+                apostar(car)
+            }
+            else -> {
+                println("Escoge una acción valida, $m no es una acción valida.")
+                continue
+            }
+        }
     }
 }
 
 
+fun main() {
+    val usr = inicio()
+    println("anda pasando algo")
+    runBlocking {
+        val car = Carrera(6, usr)
+        val x = launch {
+            println("Creando la serie de carreras.")
+            var i = 0
+            while (isActive){
+                println(i)
+                delay(1500L)
+                i+=1
+            }
+        }
+        launch {
+            println("Haciendo otra cosa")
+            var i = 0
+            while(isActive){
+                println(i)
+                delay(1000L)
+                i-=1
+            }
+        }
+        launch {
+            delay(2000L)
+            println(readLine())
+        }
 
-
-
-
-fun main(){
-    val usr = inicio() ?: exitProcess(0)
-    println("Usurario ${usr.nombre}, tu historial ${usr.historial.historial}")
-
-}
+    }
+    usr.guarda()
+    println("Usurario guardado")
+    }
