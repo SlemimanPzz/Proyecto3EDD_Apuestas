@@ -22,7 +22,6 @@ fun String.hash512() = Hashing.sha512().hashString(this, StandardCharsets.UTF_8)
  */
 fun leeContrasena(): String {
     val prov = System.console().readPassword("Contraseña:")
-
     println(String(prov))
     return String(prov)
 }
@@ -99,6 +98,7 @@ data class Usuario(val nombre: String, var saldo: Float, val historial: Historia
                 return Usuario(nombre =  username, saldo = saldo, historial = Historial(mutableListOf()), hashPassword = hash)
             } catch (ex : RuntimeException){
                 println("Cancelando creación de usuario.")
+                println(ex.message)
                 return null
             }
         }
@@ -140,5 +140,13 @@ data class Usuario(val nombre: String, var saldo: Float, val historial: Historia
         val archivoGuarda = FileWriter("./.Usuarios/${this.nombre}.json")
         archivoGuarda.write(Json.encodeToString(this))
         archivoGuarda.close()
+    }
+
+    fun agregarSaldo() {
+        TODO("Not yet implemented")
+    }
+
+    fun consultaHistorial() {
+        TODO("Not yet implemented")
     }
 }
