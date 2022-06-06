@@ -3,7 +3,7 @@ import kotlin.system.exitProcess
 
 fun inicio(): Usuario? {
     println("BIENVENIDO")
-    println("1. Crear Usuario")
+    println("1. Crear Usuario") 
     println("2. Inicia Sesión")
     while (true){
         val sel = readln()
