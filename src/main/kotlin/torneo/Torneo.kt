@@ -1,27 +1,28 @@
 package torneo
 
-import kotlin.Random.nextInt
+import kotlin.random.nextInt
 import kotlin.math.min 
-import los.illuminati.colors
+import los.illuminati.estructuras.Lista
+import los.illuminati.colors.Colors
 import usuario.*
 
-class Torneo(){
+class Torneo(val usuario: Usuario){
 
-    val candidatos: Lista<Candidatos> // Lista de candidatos 
+    val candidatos = Lista<Candidatos>() // Lista de candidatos 
     var apuesta: Int = 0; // ID del canditadato al que se le aposto 
     var apostado: Float = 0F; // la cantidad que se aposto
-    var minCandidato Candidatos // el candidato con menor probabilidad de ganar 
-    var maxCandidato Candidatos // el candidato con mayor probabilidad de ganar
-    var candidatoGanador // Ganador de la partida 
+    var minCandidato = Candidatos(0,0,0.0,0.0) // el candidato con menor probabilidad de ganar 
+    var maxCandidato = Candidatos(0,0,0.0,0.0) // el candidato con mayor probabilidad de ganar
+    var candidatoGanador = Candidatos(0,0,0.0,0.0)  // Ganador de la partida 
+    var ncandidatos = kotlin.random.Random.nextInt(1 .. 2); // EL número de candidatos puede ser 16 o 32
 
     init{
-        var ncandidatos = kotlin.random.nextInt(1...2)
         when(ncandidatos){
             1-> ncandidatos = 16
             2-> ncandidatos = 32
         }
-        for(i in 0... ncandidatos-1){
-            candidatos.add(Candidatos(0,i,0))
+        for(i in 0 .. ncandidatos-1){
+            candidatos.add(Candidatos(0,i,0.0,0.0))
         }
     }
 
@@ -29,41 +30,47 @@ class Torneo(){
      * Método para simular todas las partidas del torneo
      */
     fun partidas(){
-        for(i in 0 ... ncandidatos-2){
-            partida(candidadatos.get(i), candidadatos.get(i+1))
+        for(i in 0 .. ncandidatos-2){
+            partida(candidatos.get(i), candidatos.get(i+1))
         }
-        //hay que agregar el tiempo entre cada partida
     }
 
     /**
      * Método para simular un partido entre dos candidatos
      */
-    fun partida(candidatoA : Candidatos, candidatoB : Candidatos):{
+    fun partida(candidatoA : Candidatos, candidatoB : Candidatos){
 
-        var cuotaA 
-        var coutaB 
+        candidatoA.probabilidad = candidatoA.habilidad.toDouble() / (candidatoA.habilidad + candidatoB.habilidad)
+        candidatoB.probabilidad = candidatoB.habilidad.toDouble() / (candidatoB.habilidad + candidatoA.habilidad)
 
-        probabilidadA = (candidatoA.habilidad) / (candidatoA.habilidad + candidatoB.habilidad)
-        probabilidadB = (candidatoB.habilidad) / (candidatoB.habilidad + candidatoA.habilidad)
-
-        candidadatoA.cuota =  1 / probabilidadA
-        candidadatoB.cuota = 1 /probabilidadB
+        candidatoA.cuota =  1.0 / candidatoA.probabilidad
+        candidatoB.cuota = 1.0 /candidatoB.probabilidad
 
         Colors.println("Empieza Partida", Colors.HIGH_INTENSITY)
         Colors.println("Juega el candidato " + candidatoA.id + " vs " + candidatoB.id, Colors.HIGH_INTENSITY)
-        Colors.println("Cuotas de los candidatos ->", Colors.HIGH_INTENSITY)
-        Colors.println("Cuota del candidato " + candidatoA.id + " es " + candidadatoA.cuota, Colors.HIGH_INTENSITY)
-        Colors.println("Cuota del candidato " + candidatoB.id + " es "  + candidadatoB.cuota, Colors.HIGH_INTENSITY )
-        Colors.println("Escribe el id del candidato al que quieres apostar")
-        Colors.println(" Tienes " + " segundos para realizar tu apuesta ")
+        Colors.println("--Información de los candidatos--", Colors.HIGH_INTENSITY + Colors.RED)
+        Colors.println("Habilidad ->", Colors.HIGH_INTENSITY + Colors.BLUE)
+        Colors.println("candidato " + candidatoA.id + " : " + candidatoA.habilidad, Colors.HIGH_INTENSITY)
+        Colors.println("candidato " + candidatoB.id + " : "  + candidatoB.habilidad, Colors.HIGH_INTENSITY)
+        println("========================")
+        Colors.println("Probabilidad ->", Colors.HIGH_INTENSITY + Colors.BLUE)
+        Colors.println("candidato " + candidatoA.id + " : " + candidatoA.probabilidad, Colors.HIGH_INTENSITY)
+        Colors.println("candidato " + candidatoB.id + " : "  + candidatoB.probabilidad, Colors.HIGH_INTENSITY)
+        println("========================")
+        Colors.println("Cuotas ->", Colors.HIGH_INTENSITY + Colors.GREEN)
+        Colors.println("candidato " + candidatoA.id + " : " + candidatoA.cuota, Colors.HIGH_INTENSITY)
+        Colors.println("candidato " + candidatoB.id + " : "  + candidatoB.cuota, Colors.HIGH_INTENSITY )
+        println("========================")
+        Colors.println("Escribe el id del candidato al que quieres apostar", Colors.HIGH_INTENSITY)
+        Colors.println(" Tienes " + " segundos para realizar tu apuesta ", Colors.HIGH_INTENSITY)
 
-        apostar(candidadatoA,candidatoB)
-
+        apostar(candidatoA,candidatoB)
         // Aquí se le daría tiempo al usuario para realizar la apuesta
-        var ganador = kotlin.random.nextInt(1...100)
+
+        var ganador = kotlin.random.Random.nextInt(1..100);
 
         //Saca el jugador con menos probablilidad de ganar
-        if(kotlin.math.min(probabilidadA,probabilidadB) == probabilidadA){
+        if(kotlin.math.min(candidatoA.probabilidad,candidatoB.probabilidad) == candidatoA.probabilidad){
             minCandidato = candidatoA
             maxCandidato = candidatoB
         }else{
@@ -72,16 +79,18 @@ class Torneo(){
         }
 
         //Determina al ganador y elimina al perdedor de la lista 
-        if(ganador <= minCandidato){
+        if(ganador <= minCandidato.probabilidad){
             candidatoGanador = minCandidato
+            procesaApuesta() // se procesa la apuesta para el usuario 
             candidatos.elimina(maxCandidato)
         }else{
             candidatoGanador = maxCandidato
+            procesaApuesta() // se procesa la apuesta para el usuario 
             candidatos.elimina(minCandidato)
         }
     }
 
-    private fun procesaApuesta(){
+    fun procesaApuesta(){
         if(apuesta == 0) {
             println("Esperamos tu apuesta para la siguiente carrera.")
             return
@@ -91,11 +100,11 @@ class Torneo(){
             println("¡Haz Acertado!")
             println("Ha ganado el candidadato ${candidatoGanador.id}")
             println("Su cuota es de ${candidatoGanador.cuota}")
-            val ganancia = apostado * candidatoGanador.cuota
+            val ganancia = (apostado * candidatoGanador.cuota)
             println("Por lo tanto al haber apostado $apostado haz ganado $ganancia")
-            usuario.saldo = usuario.saldo - apostado + ganancia
+            usuario.saldo = ((usuario.saldo - apostado) + ganancia).toFloat()
             println("Tu nuevo saldo es de ${usuario.saldo}")
-            usuario.historial.historial.add(Apuesta(ganada = true, apostado = apostado, ganancia = ganancia, tipo = TipoApuesta.TORNEO))
+            usuario.historial.historial.add(Apuesta(ganada = true, apostado = apostado.toFloat(), ganancia = ganancia.toFloat(), tipo = TipoApuesta.TORNEO))
             println("Apuesta agregada a tu historial")
         } else {
             println("Pare que perdiste 😥")
@@ -132,8 +141,8 @@ class Torneo(){
             println("¿A quien se lo quieres apostar?")
             val y = readln()
             try { x.toInt() } catch (_ : NumberFormatException) { println("Ingresa un Numero valido"); continue }
-            if(x.toInt() != candidatoA.id && x.toInt() != candidatoB.id ){
-                println("Tienes que escoger un corredor valido")
+            if(y.toInt() != candidatoA.id && y.toInt() != candidatoB.id ){
+                println("Tienes que escoger un corredor valido puedes esoger ${candidatoA.id} o ${candidatoB.id}")
                 println("Vuelve a apostar")
                 continue
             }
