@@ -9,7 +9,7 @@ import usuario.Usuario
 import kotlin.random.Random
 
 class Carrera(val numCompetidores : Int, val usuario : Usuario) {
-    val corredores = Array(numCompetidores) {Corredor(it, MutableList<Int>(0){0}, 0f)}
+    val corredores = Array(numCompetidores) {Corredor(it, MutableList(0){0}, 0f)}
     private var long = 0
     var apuesta : Int = 0
     var apostado : Float = 0F
@@ -20,12 +20,9 @@ class Carrera(val numCompetidores : Int, val usuario : Usuario) {
         corredores.forEachIndexed() {index, corredor ->  corredor.historial.add(index+1)}
         long += 1
         corredores.forEach {probabilidades(it)}
-
-
         repeat(5){
             lightOutAndAwayWeGo()
         }
-
     }
 
     fun lightOutAndAwayWeGo(){
@@ -90,8 +87,6 @@ class Carrera(val numCompetidores : Int, val usuario : Usuario) {
         println("Tu apuesta ha sido procesada.")
         apuesta = 0
         apostado = 0F
-
-
     }
 
     suspend fun hacerCarrera(){

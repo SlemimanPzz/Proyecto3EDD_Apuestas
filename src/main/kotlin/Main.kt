@@ -1,8 +1,12 @@
 import carrera.Carrera
 import kotlinx.coroutines.*
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import tornadofx.launch
 import usuario.Usuario
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStreamReader
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.LinkedBlockingDeque
 
 fun inicio(): Usuario {
     println("BIENVENIDO")
@@ -22,7 +26,7 @@ fun inicio(): Usuario {
                 2 -> {
                     println("Ingresa tu Usuario")
                     val usr = Usuario.iniciaSesion(readln()) ?: continue
-                    println("Seción iniciado con usuario ${usr.nombre}")
+                    println("Section iniciado con usuario ${usr.nombre}")
                     return usr
                 }
                 else -> println("Ingresa un numero valido")
@@ -141,35 +145,36 @@ fun menu(car : Carrera, usr : Usuario) {
 }
 
 
-fun main() {
-    val usr = inicio()
-    println("anda pasando algo")
-    runBlocking {
-        val car = Carrera(6, usr)
-        val x = launch {
-            println("Creando la serie de carreras.")
-            var i = 0
-            while (isActive){
-                println(i)
-                delay(1500L)
-                i+=1
-            }
-        }
-        launch {
-            println("Haciendo otra cosa")
-            var i = 0
-            while(isActive){
-                println(i)
-                delay(1000L)
-                i-=1
-            }
-        }
-        launch {
-            delay(2000L)
-            println(readLine())
-        }
 
-    }
-    usr.guarda()
-    println("Usurario guardado")
-    }
+fun main() {
+    val blockingQueue = LinkedBlockingDeque<String>()
+    val input = BufferedReader(InputStreamReader(System.`in`))
+    val hilo1 = Thread(Runnable {
+        while (true) {
+            try {
+                blockingQueue.put(input.readLine())
+            } catch (e: InterruptedException) {
+                e.printStackTrace()
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }).start()
+
+    val hilo2 = Thread(Runnable {
+        try {
+            while (true) {
+                try {
+                    TimeUnit.SECONDS.sleep(5)
+                } catch (e: InterruptedException) {
+                    e.printStackTrace()
+                }
+                var poll: String? = blockingQueue.poll()
+                poll = poll ?: "Nada"
+                println(poll)
+            }
+        } catch (e: IOException) {
+            e.printStackTrace()
+        }
+    }).start()
+}
