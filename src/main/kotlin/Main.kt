@@ -1,6 +1,6 @@
+
 import carrera.Carrera
 import kotlinx.coroutines.*
-import tornadofx.launch
 import usuario.Usuario
 import java.io.BufferedReader
 import java.io.IOException
@@ -36,6 +36,7 @@ fun inicio(): Usuario {
         }
     }
 }
+
 
 fun consultaCarreras(car : Carrera){
     while (true){
@@ -160,7 +161,6 @@ fun main() {
             }
         }
     }).start()
-
     val hilo2 = Thread(Runnable {
         try {
             while (true) {
