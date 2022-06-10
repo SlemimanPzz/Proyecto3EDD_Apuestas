@@ -20,11 +20,6 @@ compileKotlin{
     kotlinOptions.jvmTarget = '11'
 }
 
-
-compileJava {
-    targetCompatibility = '11'
-}
-
 jar {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
