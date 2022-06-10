@@ -1,0 +1,7 @@
+/home/lrodriguez/Documents/UNAM/semestres/semestre2/EDD/Proyecto3EDD_Apuestas/src/main/kotlin/Main.kt
+/home/lrodriguez/Documents/UNAM/semestres/semestre2/EDD/Proyecto3EDD_Apuestas/src/main/kotlin/torneo/Torneo.kt
+/home/lrodriguez/Documents/UNAM/semestres/semestre2/EDD/Proyecto3EDD_Apuestas/src/main/kotlin/usuario/TipoApuesta.kt
+/home/lrodriguez/Documents/UNAM/semestres/semestre2/EDD/Proyecto3EDD_Apuestas/src/main/kotlin/usuario/Apuesta.kt
+/home/lrodriguez/Documents/UNAM/semestres/semestre2/EDD/Proyecto3EDD_Apuestas/src/main/kotlin/usuario/Historial.kt
+/home/lrodriguez/Documents/UNAM/semestres/semestre2/EDD/Proyecto3EDD_Apuestas/src/main/kotlin/torneo/Candidatos.kt
+/home/lrodriguez/Documents/UNAM/semestres/semestre2/EDD/Proyecto3EDD_Apuestas/src/main/kotlin/usuario/Usuario.kt

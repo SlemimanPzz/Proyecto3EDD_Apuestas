@@ -9,7 +9,6 @@ import usuario.*
 class Torneo(val usuario: Usuario){
 
     val candidatos = Lista<Candidatos>() // Lista de candidatos 
-    val candidatosMezclados = Lista<Candidatos>() 
     var apuesta: Int = 0; // ID del canditadato al que se le aposto 
     var apostado: Float = 0F; // la cantidad que se aposto
     var minCandidato = Candidatos(0,0,0.0,0.0) // el candidato con menor probabilidad de ganar 
@@ -25,25 +24,23 @@ class Torneo(val usuario: Usuario){
         for(i in 0 .. ncandidatos-1){
             candidatos.add(Candidatos(0,i,0.0,0.0))
         }
-
-        mezclaCandidatos();
     }
 
     /**
      * Método para mezclar los candidatos en la lista
      */
-    fun mezclaCandidatos(){
+    // fun mezclaCandidatos(){
 
-        val candidatosMezclados = Lista<Candidatos>() 
+    //     val candidatosMezclados = Lista<Candidatos>() 
 
-       while(!candidatos.isEmpty()){
-           var index = kotlin.random.Random(candidatos.size());
-           candidatosMezclados.add(candidatos.get(index));
-           candidatos.delete(candidatos.get(index));
-       }
+    //    while(!candidatos.isEmpty()){
+    //        var index = kotlin.random.Random(candidatos.size());
+    //        candidatosMezclados.add(candidatos.get(index));
+    //        candidatos.delete(candidatos.get(index));
+    //    }
 
-       candidatos = candidatosMezclados.copia()
-    }
+    //    candidatos = candidatosMezclados.copia()
+    // }
     /**
      * Método para simular todas las partidas del torneo
      */
