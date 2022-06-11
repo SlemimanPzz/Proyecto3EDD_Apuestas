@@ -8,8 +8,8 @@ import usuario.*
 
 class Torneo(val usuario: Usuario){
 
-    val candidatos = Lista<Candidatos>() // Lista de candidatos 
-    var apuesta: Int = 0; // ID del canditadato al que se le aposto 
+    var candidatos = Lista<Candidatos>() // Lista de candidatos
+    var apuesta: Int = 0; // ID de los candidatos a los que se le apostó
     var apostado: Float = 0F; // la cantidad que se aposto
     var minCandidato = Candidatos(0,0,0.0,0.0) // el candidato con menor probabilidad de ganar 
     var maxCandidato = Candidatos(0,0,0.0,0.0) // el candidato con mayor probabilidad de ganar
@@ -29,18 +29,17 @@ class Torneo(val usuario: Usuario){
     /**
      * Método para mezclar los candidatos en la lista
      */
-    // fun mezclaCandidatos(){
+     fun mezclaCandidatos(){
 
-    //     val candidatosMezclados = Lista<Candidatos>() 
+         val candidatosMezclados = Lista<Candidatos>()
 
-    //    while(!candidatos.isEmpty()){
-    //        var index = kotlin.random.Random(candidatos.size());
-    //        candidatosMezclados.add(candidatos.get(index));
-    //        candidatos.delete(candidatos.get(index));
-    //    }
-
-    //    candidatos = candidatosMezclados.copia()
-    // }
+        while(!candidatos.esVacia()){
+            var index  = kotlin.random.Random.nextInt(candidatos.getLongitud());
+            candidatosMezclados.add(candidatos.get(index));
+            candidatos.elimina(candidatos.get(index));
+        }
+        candidatos = candidatosMezclados.copia()
+     }
     /**
      * Método para simular todas las partidas del torneo
      */
@@ -84,7 +83,7 @@ class Torneo(val usuario: Usuario){
 
         var ganador = kotlin.random.Random.nextInt(1..100);
 
-        //Saca el jugador con menos probablilidad de ganar
+        //Saca el jugador con menos probabilidad de ganar
         if(kotlin.math.min(candidatoA.probabilidad,candidatoB.probabilidad) == candidatoA.probabilidad){
             minCandidato = candidatoA
             maxCandidato = candidatoB

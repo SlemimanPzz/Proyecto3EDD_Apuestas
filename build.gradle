@@ -1,4 +1,4 @@
-plugins {
+    plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.6.21'
     id 'org.jetbrains.kotlin.plugin.serialization' version '1.6.21'
     id 'java'
@@ -8,8 +8,6 @@ plugins {
 
 group 'los.illuminati'
 version '1.0'
-sourceCompatibility = 11
-targetCompatibility = 11
 
 repositories {
     mavenCentral()
@@ -17,7 +15,7 @@ repositories {
 
 
 compileKotlin{
-    kotlinOptions.jvmTarget = '11'
+    kotlinOptions.jvmTarget = '1.8'
 }
 
 jar {

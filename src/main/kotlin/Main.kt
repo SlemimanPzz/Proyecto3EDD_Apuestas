@@ -1,5 +1,6 @@
 
 import carrera.Carrera
+import torneo.Torneo 
 import kotlinx.coroutines.*
 import usuario.Usuario
 import java.io.BufferedReader
